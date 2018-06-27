@@ -1,0 +1,74 @@
+1) Write a Stored Procedure which returns the most Expensive Pack from all the packages possible.
+
+Solution:
+
+CREATE OR REPLACE FUNCTION Most_Expensive_Pack1()
+  RETURNS varchar(50) AS
+$BODY$
+declare
+x pack%rowtype; 
+maxprice integer :=0;
+maxpname varchar(50);
+begin
+for x in select * from pack
+loop
+if x.price>maxprice then maxprice:=x.price;
+                         maxpname:=x.pack_name;
+end if;
+end loop;
+return maxpname;
+end;
+$BODY$
+  LANGUAGE plpgsql;
+select Most_Expensive_Pack1()  
+
+2) Write a Stored Procedure which would give me the number of shows which are aired in between 1 to 2 P.M and 5 to 6 P.M
+
+Solution:
+
+CREATE OR REPLACE FUNCTION No_Of_Shows()
+  RETURNS integer AS
+$BODY$
+declare
+x shows%rowtype; 
+total integer:=0;
+begin
+for x in select * from shows
+loop
+if (x.start_time=1 and x.end_time=2)or(x.start_time=5 and x.end_time=6) then total:=total+1;
+end if;
+end loop;
+return total;
+end;
+$BODY$
+  LANGUAGE plpgsql;
+select No_Of_Shows()  
+
+3) Write a Stored Procedure which would return the number of movies available in On_Demand service with price lesser than or equal to 100.
+
+Solution:
+
+CREATE OR REPLACE FUNCTION Movies_OnDemand()
+  RETURNS integer AS
+$BODY$
+declare
+x on_demand%rowtype; 
+total integer:=0;
+begin
+for x in select * from on_demand
+loop
+if x.price<=100 and x.category='Movies' then total:=total+1;
+end if;
+end loop;
+return total;
+end;
+$BODY$
+  LANGUAGE plpgsql;
+select Movies_OnDemand()  
+
+4)
+
+
+
+
+

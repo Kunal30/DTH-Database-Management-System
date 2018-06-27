@@ -1,0 +1,91 @@
+DBMS Project: DTH Management System
+Group 2 Team-F
+Team Members:
+201401127:Krishanu Konar
+201401130:Piyush Datani
+201401131:Kunal Suthar
+201401132:Jay Trivedi
+
+Retrieval Queries:
+
+1. Find all Service Providers that provide channel “National Geographic Channel”.
+
+select distinct sp_name from pack natural join pack_channel_info natural join channel natural join service_provider where channel_name='National Geographic Channel'
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+2. Find the Service Providers which provide the Cheapest Sports Pack.
+
+select pack_id,pack_name,price from pack natural join pack_channel_info natural join channel natural join service_provider where category='Sports' order by price limit 1;
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+3. Find all the different packs that are provided by a user of name='Priyaranjan Sachetan Patel''s  subscribed service provider.
+
+select pack_id,pack_name from (select sp_id from users where first_name='Priyaranjan' and middle_name='Sachetan' and last_name='Patel') as sp
+natural join service_provider natural join pack
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+4. Find all the shows that would be broadcasted by a channel named 'HBO'.
+
+select show_id,show_name from shows natural join channel where channel_name='HBO'
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+5. Find the top 3 cheapest service providers that provide “Star Plus” channel.
+
+select sp_id,sp_name from (select * from channel natural join pack natural join pack_channel_info where channel_name='Star Plus' order by price limit 3) as w
+natural join service_provider
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+6. Give details about all the Channels available in a "Tata Entertainment" pack.
+
+select * from channel natural join pack_channel_info natural join pack where pack_name = 'tata_entertainment'
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+7. Give all the channels/packs a particular user has subscribed to.
+
+select pack_name,channel_name from users natural join subscriptions natural join pack_channel_info natural join pack natural join channel where user_id=167
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+8. Give the expiry date of a pack for a given user 'Prajin Kanchan Kumar' which would signify the validity of all the packs.
+
+select start_date,end_date,pack_id, from subscriptions natural join users where first_name='Prajin' and middle_name='Kanchan' and last_name='Kumar'
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+9. What is the total revenue earned by the Tata Sky Service Provider from all its users through its entertainment package(That is the total cost of the entertainment packs which the specific user has subscribed to).
+
+select sum(price) as total from subscriptions natural join pack natural join service_provider where sp_name='Tata Sky' and pack_name='tata_entertainment'
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+10. Give details of all the events that are available the on-demand server of a specific service provider.
+
+select event_id,event_name,price,category from on_demand_sp natural join on_demand natural join service_provider where sp_name='Airtel'
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+11. Give the most popular packs amongst the service providers in decreasing order.
+
+select pack_id,pack_name,count(pack_id) as number_of_packs_subscribed_by_users from subscriptions natural join pack natural join service_provider 
+group by pack_id,pack_name order by number_of_packs_subscribed_by_users DESC;
+
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+12. Find the popularity of the service provider in a given city 'Dave'.
+
+select sp_id,sp_name,count(sp_id) from postal_code natural join address natural join users natural join service_provider 
+where city='Dave' group by sp_id,sp_name order by count DESC; 
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+13. Find which service provider earns the maximum yearly turnover and them in descending order of their turnovers.
+
+select sp_id,sp_name,sum(price) from subscriptions natural join pack natural join service_provider 
+group by sp_id,sp_name order by sum DESC;
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+14. Give the shows which the channel 'Star Plus' airs in between 2 P.M. to 6 P.M.(Assume that all timings are in P.M.) .
+
+select show_id,show_name,start_time,end_time from shows natural join channel where channel_name='Star Plus' and start_time >=2 and start_time<=5
+
+**----------------------------------**----------------------------------**----------------------------------**---------------------------------**----------------------------------------**
+15. Display all the packs which would allow me to watch the show 'Oolta Chashma'
+
+select pack_id,pack_name from shows natural join channel natural join pack_channel_info natural join pack where show_name='Oolta Chashma'
+
+**----------------------------------**----------------------------------** THE END **----------------------------------**-----------------------------------------------------------------**
